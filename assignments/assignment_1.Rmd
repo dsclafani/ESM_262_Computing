@@ -1,0 +1,14 @@
+---
+title: "Assignment_1"
+author: "Danielle Sclafani"
+date: "2/8/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+I am taking this course for several reasons. First I would like to gain more experience in R and other coding languages if possible. I enjoyed learning R last year in Intro to Data Science and Advanced Data Science, however, I have not used R outside of class a lot. I foresee that I will need to use R or another coding language when I graduate and I would like to gain as much experience as possible. Also, I would like to take environmental modeling in the spring and this class is a pre-requisite.
+
+I have some experience with data analytics in excel from my previous job. I used excel to map data using vlookups, hlookups, and organized data in pivot tables. I love using excel and use it whenever I can. My experience with R is limited to the two classes I took at Bren and some minor data visualizations I created for my internship this summer.
