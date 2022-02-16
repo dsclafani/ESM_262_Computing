@@ -24,7 +24,7 @@ yield=1.8∗fertilizer2−0.5∗fertilizer+0.3∗TP
 
 
 ```{r}
-#random sample of fertilizer , 10 values mean = 5, standard deviation = 0.5
+#creating random sample of fertilizer , 10 values mean = 5, standard deviation = 0.5
 
 fertilizer = rnorm(mean = 5, sd=0.5, n=10) #10 samples, making the data frame, youre going to put that into the loop below
 
@@ -42,6 +42,10 @@ yield_df = data.frame(fertilizer,
                       precip = 20,
                       yield = y)
 
+#look at R file to see where you made these functions
 crop_yield(fertilizer, precip)
+
+crop_yield_total(fertilizer, precip)
+
 ```
 

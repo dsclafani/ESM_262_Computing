@@ -7,8 +7,18 @@
 #' 
 # Function definition
 
-crop_yield = function(f, TP) {
+#to get crop yield per year
+crop_yield = function(f, TP)
+  {
   y = 1.8*f^2 - 0.5*f+0.3*TP
   return(y)
 }
 
+
+#to get total crop yield for all the years you input
+crop_yield_total = function(f, TP)
+{
+  y = 1.8*f^2 - 0.5*f+0.3*TP
+  total = sum(y) 
+  return(total)
+}
