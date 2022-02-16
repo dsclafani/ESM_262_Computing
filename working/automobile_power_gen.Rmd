@@ -1,0 +1,86 @@
+---
+title: "automobile_power_gen"
+author: "Danielle Sclafani"
+date: "2/14/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+## Autombobile Power Generation Funciton
+Contract
+*Input*: Vehicle speed, V (m/s), vehicle mass, m  (kg), surface area of the car, A (m2)
+*Output*: Power generation Pb (W)
+*Parameters*: acceleration due to gravity, g (9.8 m/s2), density of air, p_air (1.2 kg/m3), crolling (0.015), cdrag (0.3)
+
+The function will generate the power of the automobile needed to maintain the vehicles speed
+
+$Pb = crolling * m * g * V + 1/2 * A * p_air * cdrag * V^3$
+
+### Write a function to compute power, given a truck of m=31752 kg (parameters for a heavy truck) for a range of different highway speeds (30 m/s, 80 km/hr, 120 km/hr, 40 km/hr, 5km/hr ) The surface area is 16 m2
+
+```{r}
+#aut_power_gen = function(mass, speed, A, crolling=0.015, g=9.8, p_air= 1.2,cdrag = 0.3){
+ # result = crolling*m*g*speed + 1/2*A*p_air*cdrag*speed^3
+ # return(result)}
+
+aut_power_gen(31752, 30, 16)
+```
+
+
+```{r}
+#converting m/s to km/hr
+#80 km/hr, 120 km/hr, 40 km/hr, 5km/hr
+
+#80 km/hr
+80/3.6 
+#= 22.22 m/s
+aut_power_gen(31752, 22.22, 16)
+#135308.3
+
+#120 km/hr
+120/3.6 
+#= 33.33 m/s
+aut_power_gen(31752, 33.33, 16)
+#262203.9
+
+#40 km/hr
+40/3.6 
+#= 11.11 m/s
+aut_power_gen(31752, 11.11, 16)
+#55805.85
+
+#5 km/hr
+5/3.6 
+#= 1.39 m/s
+aut_power_gen(31752, 1/39, 16)
+#119.6807
+
+```
+
+#making a data frame
+```{r}
+
+power = aut_power_gen(m=31752, speed=c(22.22, 33.33, 11.11, 1.39), A=16)
+
+power_speed = data.frame(power, 
+                         speed = c (22.22, 33.33, 11.11, 1.39))
+
+ggplot(data = power_speed, aes(x = speed, y = power)) + geom_line()
+```
+
+## Using a lighter car
+```{r}
+
+power_light = aut_power_gen(m=21752, speed=c(22.22, 33.33, 11.11, 1.39), A=16)
+
+power_speed_light = data.frame(power_light, 
+                         speed = c (22.22, 33.33, 11.11, 1.39))
+
+ggplot() + geom_line(data = power_speed_light, aes(x=speed, y = power_light)) + geom_line(data = power_speed, aes(x = speed, y = power))
+```
+

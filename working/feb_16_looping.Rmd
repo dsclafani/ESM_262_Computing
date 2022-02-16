@@ -1,0 +1,47 @@
+---
+title: "feb_16_looping"
+author: "Danielle Sclafani"
+date: "2/16/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(purrr)
+library(ggpubr)
+```
+
+
+# Try this - make a random sample of fertilizer application, 10 values with mean of 5 and standard deviation of 0.5
+
+(user rnorm function in R to do this)
+
+Lets imagine that annual yield of a crop can be estimated follows:
+
+yield=1.8∗fertilizer2−0.5∗fertilizer+0.3∗TP
+
+
+
+```{r}
+#random sample of fertilizer , 10 values mean = 5, standard deviation = 0.5
+
+fertilizer = rnorm(mean = 5, sd=0.5, n=10) #10 samples, making the data frame, youre going to put that into the loop below
+
+#loop
+y = rep(x=0, times=10) # taking values from 0 to 10, but we don't know what the values are, we get that from the next code
+for (i in 1:10) { 
+ y[i] = 1.8*fertilizer[i]^2 - 0.5*fertilizer[i] +0.1*20 #put the formula in from class slides, then use i has an index- meaning that the first value for fertilizer matches the first value of crop yield (y), until the nth(i) value of fert to nth(i) value of y- think of i as a subscript
+}
+y
+sum(y)
+
+#making a random data.frame for precipitation
+
+yield_df = data.frame(fertilizer,
+                      precip = 20,
+                      yield = y)
+
+crop_yield(fertilizer, precip)
+```
+
