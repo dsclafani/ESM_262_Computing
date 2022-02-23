@@ -49,3 +49,11 @@ crop_yield_total(fertilizer, precip)
 
 ```
 
+### loops are good because for example, say that crop yield is dependent on the crop yield from the previous year
+
+#error checking
+```{r}
+#want to make sure that in the random sample, fertilizier is not negative, and if it is we will get the error message "Less than zero"
+fertilzier = ifelse(fertilizer < 0, return("Less than zero"), fertilizer)
+```
+
