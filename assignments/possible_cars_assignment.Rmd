@@ -191,6 +191,10 @@ method3_plot
 
 ggarrange(method1_plot, method2_plot, method3_plot, nrow=3)
 
+powerall_cars %>% map(mean)
+powerall_cars2  %>% map(mean)
+powerall_cars3 %>% map(mean)
+
 ```
 
 
