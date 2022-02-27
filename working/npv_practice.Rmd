@@ -1,0 +1,118 @@
+---
+title: "npv_practice"
+author: "Danielle Sclafani"
+date: "2/26/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(purrr)
+library(ggpubr)
+```
+
+# Using Net Present Value (NPV) to practicing looping within functions
+
+### First made function for NPV in an R script saved in R folder.
+
+```{r}
+source("../R/npv.R")
+#npv = function(i, v, t) {
+#  npv = v/((1 + i)^t)
+#  return(npv)}
+
+npv
+
+npv(i = 0.01, v=20, t =20) #correct answer
+npv(0.01, 20, 20) #also works this way
+
+#generate an input (value is the value of the damages)
+damages = c(25, 33, 91, 24)
+
+#sensitivity to discount rates
+discount_rates = seq(from=0.01, to=0.04, by = 0.005)
+yr = 10
+
+#compute some npvs for different discount rates for each damage
+#first generate a data frame to store results - we have both damages and discount rates that are changing- so we need rows and columns
+
+npvs = data.frame(matrix(nrow = length(damages), ncol = length(discount_rates)))
+
+#right now npvs is an empty data frame, we need to populate it with a looped function
+
+#now use a nested for loop to populate
+
+for (d in 1:length(damages)) { #d is saying like the dth term in the damages data sequence - like a subscript. basically you are naming the inputs for the damages so you can put it into the formula below
+  for (j in 1:length(discount_rates)){
+    npvs[d,j]=npv(v=damages[d],i = discount_rates[j], t=yr) # the dataframe npvs is the formula "npv" with 'coordinate pair' of every combination of damages and discount rates, and time is equal to 10
+  }
+}
+
+npvs
+
+```
+```{r}
+# making npvs dataframe look nice
+
+colnames(npvs) = discount_rates
+rownames(npvs)= damages
+npvs
+```
+
+```{r}
+# in order to grpah need to add a column for original value then rearrange
+
+npvs$damage = rownames(npvs) # this added a column to the end of the dataset called "damage" with the values for the damages as the values - we want this as the first column
+
+npvsg = npvs %>% pivot_longer(!damage, names_to="dis", values_to="npv") # this pivoted the dataframe npvs by the damage value. so the damage value became the first value, and then the next values in that coordinate pair for discount rate and netpresentvalue were attached to it and got put next to it. the names of the columns in npvs were the discount rates, so we name them "dis", the values within the matrix were the net present value for the corresponding discount rate and damage value
+head(npvsg) # to view the new data frame you made
+
+```
+
+```{r}
+#now we can plit this dataframe
+
+ggplot(data = npvsg, aes(x=damage, y=npv, col=dis)) +geom_point() +labs(col= "Discount\nRate")
+```
+
+
+```{r}
+#summing all the damages
+
+npv.total = npvsg %>% group_by(dis) %>% summarize(t=sum(npv))
+ggplot(npv.total, aes(dis,t, fill =dis)) +geom_col() + labs(x=" Displacement Rate", y = "Total ($)")
+```
+
+# using map_dfc from the purr family of functions 
+
+
+```{r}
+#generate an input (value is the value of the damages)
+damages = c(25, 33, 91, 24)
+
+#sensitivity to discount rates
+discount_rates = seq(from=0.01, to=0.04, by = 0.005)
+yr = 10
+
+npvs_1 = pmap(list(discount_rates), npv, t = 10, v =damages)
+#turn this into data frame
+
+npvs_1 = as.data.frame(npvs_1, col.names = discount_rates)
+npvs_1$damage = damages
+
+npvs_1sg = npvs_1 %>%  pivot_longer(!damage, names_to = "dis", values_to="npv")
+
+ggplot(npvs_1sg, aes(x=damage, y =npv, col = dis)) + geom_point() +labs(col="Discount\nRate")
+
+```
+
+```{r}
+#summing all the damages
+npv_1.total = npvs_1sg %>%  group_by(dis) %>% summarize(t=sum(npv)) #group the new dataset by the discount rate, and sum together all the npvs for those discount rates
+
+ggplot(npv_1.total, aes(x=dis, y = t, fill=dis)) +geom_col() +labs(x = "Discount Rate", y ="Total NPV od Damages ($)")
+```
+
+
+
