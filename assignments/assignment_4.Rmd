@@ -1,0 +1,66 @@
+---
+title: "assignment_4"
+author: "Danielle Sclafani"
+date: "2/26/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(purrr)
+library(ggpubr)
+```
+
+## calculating surfer speed based on mass of surfer, speed of wave, height of wave, and surface Area of surfboard
+
+*3 surfboards
+* surfboard 1 8x2  feet - A = 1.48 m^2
+* surfboard 2 6x2 feet - A = 1.11 m^2
+*surfboard 3 4x2 feet - A = 0.74 m^2
+
+* 3 surfers m in kg
+* surfer A - m = 72
+* surfer B - m = 80
+*surfer C - m = 95
+
+height of the waves ranges between 2-8 feet, by increments of 0.5
+
+average speed of the wave is 2 m/s
+
+```{r}
+#surfer_speed = function(m, v, h, A, g=9.8, cd= 0.04 , r=1.02){
+#   surfer_speed= ((m*v^2 + 2*m*g*h)/(m+r*A*cd*h))^(1/2)
+#   return(s)}
+
+surfboards_A = c(1.48, 1.11, 0.74)
+
+surfer_mass = 72
+
+wave_height = seq(from=2, to = 8, by=0.5)
+
+wave_speed =2
+
+surfer_speed_ds = data.frame(matrix(nrow = length(surfboards_A), ncol = length(wave_height)))
+
+
+for (i in 1:length(surfboards_A)) {
+    for (h in 1:length(wave_height)) {
+      surfer_speed_ds[i,h]=surfer_speed(m=surfer_mass, v=wave_speed, h=wave_height[h], A= surfboards_A[i])
+    }
+  }
+
+colnames(surfer_speed_ds) = wave_height
+rownames(surfer_speed_ds)= surfboards_A
+
+surfer_speed_ds$surfboard_A = rownames(surfer_speed_ds)
+
+surfer_sg = surfer_speed_ds %>% pivot_longer(!surfboard_A, names_to="wave_height", values_to="surfer_speed")
+```
+
+
+```{r}
+ggplot(data = surfer_sg, aes(x=wave_height, y=surfer_speed)) + geom_col() + labs(x="Wave Height", y = "Surfer Speed")+
+  facet_wrap(~surfboard_A)
+```
+
