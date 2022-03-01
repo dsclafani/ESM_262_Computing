@@ -1,0 +1,43 @@
+---
+title: "assignment_5"
+author: "Danielle Sclafani"
+date: "2/28/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(purrr)
+library(here)
+```
+
+
+## Assignment #5
+
+```{r}
+fish_data <- read.delim(here("data", "fish.txt"))
+
+summary(fish_data)
+
+rarestfish = names(which.min(summary(as.factor(fish_data))))
+rarestfish
+```
+
+```{r}
+#plotting the count of fish species
+plottitle = sprintf("The rarest fish is %s", rarestfish)
+ggplot(data.frame(fish_data), aes(x, fill=x)) + geom_histogram(stat="count")+labs(title = plottitle)
+```
+
+```{r}
+commonfish = names(which.max(summary(as.factor(fish_data))))
+commonfish #why am I getting NA's here?
+```
+
+```{r}
+# total number of fish
+lengths(fish_data) #300 entries
+```
+
+
