@@ -1,0 +1,46 @@
+---
+title: "feb_28_working"
+author: "Danielle Sclafani"
+date: "2/28/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(purrr)
+library(ggpubr)
+```
+
+@param r is the sea level rise (m)
+#' @param c is the length of the coast line (m)
+#' @param d for value of water rise inland (m) 
+#' @param d_conv is the damage conversion coefficient ($/m^3) default = 1,000,000 
+#' @return damages ($)
+
+searise = function(r, c, d, d_conv = 100000) {
+  d = 2*r
+  r = ifelse(r < 0, return("searise cannot be negative"), r)
+  damages = r * c * d * d_conv
+  return(damages)
+}
+
+```{r}
+searise()
+
+c = 1200
+
+d = c(5, 10, 15, 20, 25, 30)
+
+r = seq(from=0.5, to = 4, by=0.25)
+
+sealevel_ds = data.frame(matrix(nrow = length(d), ncol = length(r)))
+
+for (i in 1:length(d)) {
+    for (j in 1:length(r)) {
+      sealevel_ds[i,j]=searise(r=r[j], c=c, d=d[i])
+    }
+}
+
+```
+

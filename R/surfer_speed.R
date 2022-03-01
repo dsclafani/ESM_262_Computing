@@ -13,5 +13,6 @@
 #'
 # function definition
 surfer_speed = function(m, v, h, A, g=9.8, cd= 0.04 , r=1.02){
-   surfer_speed= ((m*v^2 + 2*m*g*h)/(m+r*A*cd))^(1/2)
+   s= ((m*v^2 + 2*m*g*h)/(m + r*A*cd*h))^(1/2)
+   return(s)
 }
