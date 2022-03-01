@@ -40,4 +40,19 @@ commonfish #why am I getting NA's here?
 lengths(fish_data) #300 entries
 ```
 
+## Challenge - can we go over this in class?
+```{r}
+#generate a random sample of fish from the fish data of fishc aught on each day for ten days
+ndays = 10
+
+catches = round(runif(min=3, max = 400, n=ndays))
+
+#now for each fishing day (and its number of fish caught) - use sample to generate
+
+catches_res= list(catches) %>% pmap(sample, x=fish_data$x, replace =TRUE)
+
+catches_res[[10]]
+
+summary(catches_res)
+```
 
