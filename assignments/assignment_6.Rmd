@@ -1,0 +1,68 @@
+---
+title: "assignment_6"
+author: "Danielle Sclafani"
+date: "3/6/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+library(lubridate)
+
+```
+
+```{r}
+climate_data = read_csv(here("data","nyc_temp_data.csv")) %>% 
+  clean_names() %>% 
+  select("date", "tmax", "tmin")
+
+climate_data$date_1 <- mdy(climate_data$date)
+
+climate_data$year <- year(climate_data$date_1)
+
+```
+
+```{r}
+#testing function
+
+  clim_data <- climate_data %>% 
+    mutate(risk_level = case_when(
+      tmax >= 84 ~"low risk",
+      tmax %in% 85:94 ~ "medium risk",
+      tmax %in% 95:115 ~ "medium high risk",
+      tmax %in% 116:124 ~ "high risk",
+      tmax <= 125 ~ "very high risk"
+    ))
+  
+  risk_year <- clim_data %>%  
+    group_by(year) %>% 
+    summarize(risk_level)
+  
+   temp_extremes <- risk_year %>% 
+     group_by(year, risk_level) %>% 
+     count()
+```
+
+```{r}
+summary(temp_extremes)
+```
+
+```{r}
+#trying function with tmax.txt data
+
+class_temp_data <- read.delim(here("data","tmax.txt")) %>% 
+  str_split_fixed()
+#need to separate date from temperature in this data file - need to figure this out
+
+
+
+
+temperature_risk
+
+temperature_risk(class_temp_data, tmax.date)
+
+```
+
